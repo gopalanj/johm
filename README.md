@@ -1,3 +1,12 @@
+
+FYI, this is forked from [xetorthio/johm](http://github.com/xetorthio/johm).
+
+Change log:
+
+- Version 0.5.1
+	> Fixed compilation errors with the latest [Jedis](http://github.com/xetorthio/jedis) version 2.0.0
+	> Modified InvalidFieldException.java to extend from JOhmException and also to chain the original exception that caused this exception
+
 # JOhm
 
 JOhm is a blazingly fast Object-Hash Mapping library for Java inspired by the awesome [Ohm](http://github.com/soveran/ohm). The JOhm OHM is a 

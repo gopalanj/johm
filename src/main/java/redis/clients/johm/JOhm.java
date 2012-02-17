@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import redis.clients.jedis.JedisException;
+import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.TransactionBlock;
 import redis.clients.johm.collections.RedisArray;
@@ -95,25 +95,27 @@ public final class JOhm {
         JOhmUtils.Validator.checkValidModelClazz(clazz);
         List<Object> results = null;
         if (!JOhmUtils.Validator.isIndexable(attributeName)) {
-            throw new InvalidFieldException();
+            throw new InvalidFieldException("Cannot search by non-indexable field " + attributeName);
         }
 
         try {
             Field field = clazz.getDeclaredField(attributeName);
             field.setAccessible(true);
             if (!field.isAnnotationPresent(Indexed.class)) {
-                throw new InvalidFieldException();
+                throw new InvalidFieldException("Cannot search by field " + attributeName + 
+                		", which was not annotated by Indexed annotation");
             }
             if (field.isAnnotationPresent(Reference.class)) {
                 attributeName = JOhmUtils.getReferenceKeyName(field);
             }
         } catch (SecurityException e) {
-            throw new InvalidFieldException();
+            throw new InvalidFieldException(e);
         } catch (NoSuchFieldException e) {
-            throw new InvalidFieldException();
+            throw new InvalidFieldException(e);
         }
         if (JOhmUtils.isNullOrEmpty(attributeValue)) {
-            throw new InvalidFieldException();
+            throw new InvalidFieldException("Cannot search by field " + attributeName + 
+            		", whose value is either null or empty");
         }
         Nest nest = new Nest(clazz);
         nest.setJedisPool(jedisPool);

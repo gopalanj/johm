@@ -97,9 +97,9 @@ public final class JOhmUtils {
                     }
                 }
             } catch (IllegalArgumentException e) {
-                throw new InvalidFieldException();
+                throw new InvalidFieldException(e);
             } catch (IllegalAccessException e) {
-                throw new InvalidFieldException();
+                throw new InvalidFieldException(e);
             }
         }
     }
@@ -437,7 +437,8 @@ public final class JOhmUtils {
                 }
                 if (isIndexed) {
                     if (!isIndexable(field.getName())) {
-                        throw new InvalidFieldException();
+                        throw new InvalidFieldException("Field " + field.getName() + 
+                        		" was annotated Indexed but it is invalid for it to be indexable");
                     }
                 }
                 if (field.getType().equals(Model.class)) {
